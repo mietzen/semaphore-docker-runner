@@ -6,6 +6,9 @@ updates:
       interval: "daily"
       time: "16:00"
       timezone: "Europe/Berlin"
+    ignore:
+      - dependency-name: "semaphoreui/runner"
+        versions: ["v2.19.10"]
   - package-ecosystem: "github-actions"
     directory: "/.github/workflows"
     schedule:
