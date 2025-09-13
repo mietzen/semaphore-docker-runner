@@ -17,8 +17,9 @@ source /usr/local/bin/runner-wrapper "\$@"
 EOF
 
 RUN chmod +x /usr/local/bin/docker-wrapper
-RUN chown 1001:0 /usr/local/bin/docker-wrapper
-USER 1001
+RUN chown semaphore:root /usr/local/bin/docker-wrapper
+RUN adduser semaphore docker
+USER semaphore
 
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/usr/local/bin/docker-wrapper"]
