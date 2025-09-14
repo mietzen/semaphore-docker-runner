@@ -1,7 +1,7 @@
 FROM semaphoreui/runner:v2.16.28
 
 USER root
-RUN apk add --no-cache -U docker-cli docker-compose
+RUN apk add --no-cache -U docker docker-compose
 RUN adduser semaphore docker
 
 COPY <<EOF /usr/local/bin/docker-wrapper
