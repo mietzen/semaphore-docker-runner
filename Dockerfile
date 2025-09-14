@@ -2,7 +2,7 @@ FROM semaphoreui/runner:v2.16.28
 
 USER root
 RUN apk add --no-cache -U docker
-RUN adduser semaphore docker
+RUN adduser semaphore docker-cli docker-compose
 
 COPY <<EOF /usr/local/bin/docker-wrapper
 #!/bin/bash
@@ -12,10 +12,17 @@ if [ -n "\$SEMAPHORE_DOCKER_SSH_KEY_FILE" ]; then
     chmod 0700 ~/.ssh
     cat "\$SEMAPHORE_DOCKER_SSH_KEY_FILE" > ~/.ssh/docker_id
     chmod 0600 ~/.ssh/docker_id
-    echo "Starting ssh agent..."
-    eval `ssh-agent`
-    echo "Adding docker_id..."
-    ssh-add ~/.ssh/docker_id
+fi
+if [ -n "\$SEMAPHORE_DOCKER_HOST" ]; then
+    echo "Adding docker host to config..."
+    mkdir -p ~/.ssh
+    chmod 0700 ~/.ssh
+    echo "" >> ~/.ssh/config
+    echo "Host \$SEMAPHORE_DOCKER_HOST" >> ~/.ssh/config
+    echo "   IdentityFile ~/.ssh/docker_id" >> ~/.ssh/config
+    echo "   StrictHostKeyChecking no" >> ~/.ssh/config
+    echo "   UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+    chmod 0640 ~/.ssh/config
 fi
 source /usr/local/bin/runner-wrapper "\$@"
 EOF
