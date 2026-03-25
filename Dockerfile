@@ -1,4 +1,4 @@
-FROM semaphoreui/runner:v2.17.28
+FROM semaphoreui/runner:v2.17.30
 
 USER root
 RUN apk add --no-cache -U docker docker-compose
